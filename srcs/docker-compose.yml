@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  # MariaDB Service
+  mariadb:
+    container_name: mariadb
+    build:
+      context: ./requirements/mariadb
+      dockerfile: Dockerfile
+    image: mariadb:inception
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    networks:
+      - inception
+    env_file:
+      - .env
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # WordPress Service
+  wordpress:
+    container_name: wordpress
+    build:
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile
+    image: wordpress:inception
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    volumes:
+      - wordpress-data:/var/www/html
+    networks:
+      - inception
+    env_file:
+      - .env
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep php-fpm"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # NGINX Service
+  nginx:
+    container_name: nginx
+    build:
+      context: ./requirements/nginx
+      dockerfile: Dockerfile
+    image: nginx:inception
+    depends_on:
+      wordpress:
+        condition: service_healthy
+    volumes:
+      - wordpress-data:/var/www/html
+    networks:
+      - inception
+    ports:
+      - "443:443"
+    env_file:
+      - .env
+    restart: always
+
+# Volumes
+volumes:
+  mariadb-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/hbendjab/data/db
+
+  wordpress-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/hbendjab/data/wordpress
+
+# Networks
+networks:
+  inception:
+    driver: bridge
