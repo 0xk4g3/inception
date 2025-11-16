@@ -12,3 +12,5 @@ data/
 # Temporary files
 *.swp
 *~
+srcs/.env
+srcs/.env
