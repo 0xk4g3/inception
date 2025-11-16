@@ -1,5 +1,5 @@
 # Secrets and environment
-.env
+/srcs/.env
 secrets/
 *.log
 
