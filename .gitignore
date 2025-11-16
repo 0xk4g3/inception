@@ -1,0 +1,14 @@
+# Secrets and environment
+.env
+secrets/
+*.log
+
+# macOS
+.DS_Store
+
+# Data volumes
+data/
+
+# Temporary files
+*.swp
+*~
