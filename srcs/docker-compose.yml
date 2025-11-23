@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-  # MariaDB Service
   mariadb:
     container_name: mariadb
     build:
@@ -21,7 +20,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # WordPress Service
   wordpress:
     container_name: wordpress
     build:
@@ -44,7 +42,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # NGINX Service
   nginx:
     container_name: nginx
     build:
@@ -64,7 +61,6 @@ services:
       - .env
     restart: always
 
-# Volumes
 volumes:
   mariadb-data:
     driver: local
@@ -80,7 +76,6 @@ volumes:
       o: bind
       device: /home/hbendjab/data/wordpress
 
-# Networks
 networks:
   inception:
     driver: bridge

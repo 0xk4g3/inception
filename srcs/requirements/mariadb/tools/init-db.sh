@@ -14,8 +14,8 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
     # Initialize MySQL data directory
     mysql_install_db --user=mysql --datadir=/var/lib/mysql
     
-    echo "✓ MySQL data directory initialized!"
-fi
+    echo " MySQL data directory initialized!"
+i
 
 # Start MySQL temporarily in background for setup
 echo "Starting MySQL temporarily for configuration..."
@@ -50,7 +50,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 EOF
 
-echo "✓ Database and users created!"
+echo "Database and users created!"
 echo ""
 echo "========================================"
 echo "Database Configuration:"

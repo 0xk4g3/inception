@@ -22,7 +22,7 @@ if [ ! -f wp-config.php ]; then
     
     wp core download --allow-root
     
-    echo "✓ WordPress downloaded!"
+    echo "WordPress downloaded!"
     
     echo "Configuring WordPress..."
     wp config create \
@@ -32,7 +32,7 @@ if [ ! -f wp-config.php ]; then
         --dbhost=mariadb:3306 \
         --allow-root
     
-    echo "✓ WordPress configured!"
+    echo "WordPress configured!"
     
     echo "Installing WordPress..."
     wp core install \
@@ -44,7 +44,7 @@ if [ ! -f wp-config.php ]; then
         --skip-email \
         --allow-root
     
-    echo "✓ WordPress installed!"
+    echo "WordPress installed!"
     
     echo "Creating additional WordPress user..."
     wp user create \
@@ -54,12 +54,12 @@ if [ ! -f wp-config.php ]; then
         --user_pass=${WP_USER_PASSWORD} \
         --allow-root
     
-    echo "✓ Additional user created!"
+    echo "Additional user created!"
     
     chown -R www-data:www-data /var/www/html
     chmod -R 755 /var/www/html
     
-    echo "✓ Permissions set!"
+    echo "Permissions set!"
 else
     echo "WordPress is already installed!"
 fi
