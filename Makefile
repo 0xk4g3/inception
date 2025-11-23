@@ -1,33 +1,25 @@
-COMPOSE_FILE = srcs/docker-compose.yml
-DATA_PATH = /home/$(USER)/data
+DOCKER_COMPOSE = docker-compose
+DOCKER_COMPOSE_FILE = ./srcs/docker-compose.yml
 
-all: build up
+.PHONY: build kill down clean fclean restart
 
 build:
-	mkdir -p $(DATA_PATH)/wordpress
-	mkdir -p $(DATA_PATH)/mariadb
-	docker-compose -f $(COMPOSE_FILE) build
+	sudo mkdir -p /home/hbendjab/data/db
+	sudo mkdir -p /home/hbendjab/data/wordpress
+	@$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) up --build -d
 
-up:
-	docker-compose -f $(COMPOSE_FILE) up -d
+kill:
+	@$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) kill
 
 down:
-	docker-compose -f $(COMPOSE_FILE) down
+	@$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) down
 
-start:
-	docker-compose -f $(COMPOSE_FILE) start
-
-stop:
-	docker-compose -f $(COMPOSE_FILE) stop
-
-clean: down
-	docker system prune -af
-	docker volume rm $$(docker volume ls -q) 2>/dev/null || true
+clean:
+	@$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) down -v
 
 fclean: clean
-	sudo rm -rf $(DATA_PATH)/wordpress
-	sudo rm -rf $(DATA_PATH)/mariadb
+	sudo rm -rf /home/hbendjab/data/db
+	sudo rm -rf /home/hbendjab/data/wordpress
+	docker system prune -a -f
 
-re: fclean all
-
-.PHONY: all build up down start stop clean fclean re
+restart: clean build
